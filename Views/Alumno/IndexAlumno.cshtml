@@ -1,0 +1,35 @@
+﻿@model List<PruebaTenicaFeb2023.Models.Alumno>
+<div class="container">
+    <div class="row">
+        <div class="col mb-3">
+            @Html.ActionLink("Agregar", "Add", "Alumno",null, new { @class= "btn btn-primary float-end" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Genero</th>
+                        <th scope="col">Fecha Nacimiento</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var alumno in Model)
+                    {
+                        <tr>
+                            <td>@alumno.Id</td>
+                            <td>@alumno.Nombre</td>
+                            <td>@alumno.Genero</td>
+                            <td>@alumno.FechaNac</td>
+                            <td>@Html.ActionLink("Editar","Edit","Alumno",new { Id = alumno.Id }, new { @class = "" })</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
