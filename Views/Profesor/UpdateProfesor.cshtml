@@ -1,8 +1,9 @@
-﻿@model PruebaTenicaFeb2023.Models.Alumno
+﻿@model PruebaTenicaFeb2023.Models.Profesor
+
 <div class="container">
     <div class="row">
         <div class="col">
-            @using (Html.BeginForm(FormMethod.Post))
+            @using (Html.BeginForm("UpdateProfesor", "Profesor"))
             {
                 @Html.HiddenFor(m => m.Id)
                 <div class="mb-3">
@@ -14,14 +15,8 @@
                     @Html.TextBoxFor(m => m.Genero, new { @id = "txtGenero", @class = "form-control" })
 
                 </div>
-                <div class="mb-3">
-                    <label for="txtNombre" class="form-label">Fecha de Nacimiento</label>
-                    @Html.TextBoxFor(m => m.FechaNac, "{0:yyyy-MM-dd}", new { @id = "txtFechaNac", @class = "form-control", @type="date"})
-                    @*@Value = Convert.ToString(Model.FechaNac.ToShortDateString()) }*@
-                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             }
         </div>
     </div>
 </div>
-

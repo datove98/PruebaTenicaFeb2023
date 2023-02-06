@@ -26,14 +26,15 @@ namespace PruebaTenicaFeb2023.Controllers
         }
 
         [HttpGet]
-        [Route("Agregar")]
+        [Route("[controller]/Agregar")]
         public async Task<IActionResult> Add()
         {
-            return View("AddAlumno", new Alumno());
+            Alumno alumno = new Alumno() { FechaNac = DateTime.Now };
+            return View("AddAlumno", alumno);
         }
 
         [HttpPost]
-        [Route("Agregar")]
+        [Route("[controller]/Agregar")]
         public async Task<IActionResult> Add(Alumno alumno)
         {
             await context.Alumnos.AddAsync(alumno);
@@ -43,7 +44,7 @@ namespace PruebaTenicaFeb2023.Controllers
         }
 
         [HttpGet]
-        [Route("Actualizar/{Id:int}")]
+        [Route("[controller]/Actualizar/{Id:int}")]
         public async Task<IActionResult> Edit(int? Id)
         {
             Alumno getAlumno = new Alumno();
@@ -55,7 +56,25 @@ namespace PruebaTenicaFeb2023.Controllers
             {
                 return RedirectToAction("Alumnos");
             }
-            return View("AddAlumno", getAlumno);
+            return View("UpdateAlumno", getAlumno);
+        }
+
+        [HttpPost]
+        [Route("[controller]/Actualizar")]
+        public async Task<IActionResult> SaveAlumno(Alumno alumno)
+        {
+            var GetAlumno = await context.Alumnos.FindAsync(alumno.Id);
+            if (GetAlumno != null)
+            {
+                GetAlumno.FechaNac = alumno.FechaNac;
+                GetAlumno.Nombre = alumno.Nombre;
+                GetAlumno.Genero = alumno.Genero;
+                context.Entry(GetAlumno).State = EntityState.Modified;
+                int rowsAffected = await context.SaveChangesAsync();
+                if (rowsAffected != 0)
+                    return RedirectToAction("Index");
+            }
+            return View("UpdateAlumno", alumno);
         }
     }
 }
