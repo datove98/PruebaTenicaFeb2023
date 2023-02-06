@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PruebaTenicaFeb2023.Models;
+using PruebaTenicaFeb2023.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,6 +28,7 @@ namespace PruebaTenicaFeb2023.Controllers
         [Route("[controller]/Agregar")]
         public async Task<IActionResult> Add()
         {
+            ViewBag.Generos = Recursos.GetGeneros();
             return View("SaveProfesor", new Profesor());
         }
 
@@ -45,6 +47,7 @@ namespace PruebaTenicaFeb2023.Controllers
         public async Task<IActionResult> Edit(int? Id)
         {
             Profesor getProfesor = new Profesor();
+            ViewBag.Generos = Recursos.GetGeneros();
             if (Id != null)
             {
                 getProfesor = await context.Profesores.FindAsync(Id);
@@ -61,6 +64,7 @@ namespace PruebaTenicaFeb2023.Controllers
         public async Task<IActionResult> UpdateProfesor(Profesor profesor)
         {
             var GetProfesor = await context.Profesores.FindAsync(profesor.Id);
+            ViewBag.Generos = Recursos.GetGeneros();
             if (GetProfesor != null) {
                 GetProfesor.Nombre = profesor.Nombre;
                 GetProfesor.Genero = profesor.Genero;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PruebaTenicaFeb2023.Models;
+using PruebaTenicaFeb2023.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace PruebaTenicaFeb2023.Controllers
         public async Task<IActionResult> Add()
         {
             Alumno alumno = new Alumno() { FechaNac = DateTime.Now };
+            ViewBag.Generos = Recursos.GetGeneros();
             return View("AddAlumno", alumno);
         }
 
@@ -48,13 +50,14 @@ namespace PruebaTenicaFeb2023.Controllers
         public async Task<IActionResult> Edit(int? Id)
         {
             Alumno getAlumno = new Alumno();
+            ViewBag.Generos = Recursos.GetGeneros();
             if (Id != null)
             {
                 getAlumno = await context.Alumnos.FindAsync(Id);
             }
             else
             {
-                return RedirectToAction("Alumnos");
+                return RedirectToAction("Index");
             }
             return View("UpdateAlumno", getAlumno);
         }
@@ -64,6 +67,7 @@ namespace PruebaTenicaFeb2023.Controllers
         public async Task<IActionResult> SaveAlumno(Alumno alumno)
         {
             var GetAlumno = await context.Alumnos.FindAsync(alumno.Id);
+            ViewBag.Generos = Recursos.GetGeneros();
             if (GetAlumno != null)
             {
                 GetAlumno.FechaNac = alumno.FechaNac;
