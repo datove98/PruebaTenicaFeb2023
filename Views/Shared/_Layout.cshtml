@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - PruebaTenicaFeb2023</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
@@ -26,6 +27,9 @@
                         </li>
                         <li class="nav-item">
                             @Html.ActionLink("Grados", "Index","Grados", null , new { @class = "nav-link text-dark" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Asignaciones", "Index","Asignaciones", null , new { @class = "nav-link text-dark" })
                         </li>
                     </ul>
                 </div>

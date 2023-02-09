@@ -1,0 +1,28 @@
+﻿@model PruebaTenicaFeb2023.Models.AlumnoGrado
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            @using (Html.BeginForm("SaveAsignacion", "Asignaciones"))
+            {
+                @Html.HiddenFor(m => m.Id)
+                <div class="mb-3">
+                    <label for="txtNombre" class="form-label">Alumno</label>
+                    @Html.DropDownListFor(m => m.AlumnoId, (IEnumerable<SelectListItem>)ViewBag.Alumnos, new { @id = "drpAlumno", @class = "form-control" })
+                    @*@Html.TextBoxFor(m => m.Genero, new { @id = "txtGenero", @class = "form-control" })*@
+
+                </div>
+                <div class="mb-3">
+                    <label for="txtNombre" class="form-label">Grado</label>
+                    @Html.DropDownListFor(m => m.GradoId, (IEnumerable<SelectListItem>)ViewBag.Grados, new { @id = "drpGrado", @class = "form-control" })
+                    @*@Value = Convert.ToString(Model.FechaNac.ToShortDateString()) }*@
+                </div>
+                <div class="mb-3">
+                    <label for="txtNombre" class="form-label">Seccion</label>
+                    @Html.TextBoxFor(m => m.Seccion, new { @id = "txtSeccion", @class = "form-control" })
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            }
+        </div>
+    </div>
+</div>

@@ -45,7 +45,7 @@ namespace PruebaTenicaFeb2023.Controllers
                 int numRows = await context.SaveChangesAsync();
                 if (numRows > 0)
                 {
-                    RedirectToAction("Index");
+                    return RedirectToAction("Index");
                 }
             }
             return View("AddGrado", grado);
