@@ -1,0 +1,33 @@
+﻿@model ICollection<PruebaTenicaFeb2023.Models.Grado>
+<div class="container">
+    <div class="row">
+        <div class="col mb-3">
+            @Html.ActionLink("Agregar", "Add", "Grados",null, new { @class= "btn btn-primary float-end" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre de Grado</th>
+                        <th scope="col">Nombre de Profesor</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var grado in Model)
+                    {
+                        <tr>
+                            <td>@grado.Id</td>
+                            <td>@grado.Nombre</td>
+                            <td>@grado.Profesor.Nombre</td>
+                            <td>@Html.ActionLink("Editar","Edit","Grados",new { Id = grado.Id }, new { @class = "" })</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

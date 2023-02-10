@@ -2,7 +2,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            @using (Html.BeginForm(FormMethod.Post))
+            @using (Html.BeginForm("SaveAlumno", "Alumno"))
             {
                 @Html.HiddenFor(m => m.Id)
                 <div class="mb-3">
@@ -11,8 +11,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="txtNombre" class="form-label">Genero</label>
-                    @Html.DropDownListFor(m => m.Genero, (IEnumerable<SelectListItem>)ViewBag.Generos, new { @id = "txtGenero", @class = "form-control" })
-                    @*@Html.TextBoxFor(m => m.Genero, new { @id = "txtGenero", @class = "form-control" })*@
+                    @Html.TextBoxFor(m => m.Genero, new { @id = "txtGenero", @class = "form-control" })
 
                 </div>
                 <div class="mb-3">
@@ -25,4 +24,3 @@
         </div>
     </div>
 </div>
-

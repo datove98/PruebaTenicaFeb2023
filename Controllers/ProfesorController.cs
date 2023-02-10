@@ -2,44 +2,41 @@
 using Microsoft.EntityFrameworkCore;
 using PruebaTenicaFeb2023.Models;
 using PruebaTenicaFeb2023.Utilities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PruebaTenicaFeb2023.Controllers
 {
-    public class AlumnoController : Controller
+    public class ProfesorController : Controller
     {
-        private readonly DataContext context;
-        public AlumnoController(DataContext dataContext)
+        private DataContext context;
+        public ProfesorController (DataContext context)
         {
-            this.context = dataContext;
+            this.context = context;
         }
 
         [HttpGet]
-        [Route("Alumnos")]
+        [Route("Profesores")]
         public async Task<IActionResult> Index()
         {
-            List<Alumno> alumnos = await context.Alumnos.ToListAsync();
+            List<Profesor> profesores = await context.Profesores.ToListAsync();
 
-            return View("IndexAlumno",alumnos);
+            return View("IndexProfesor", profesores);
         }
 
         [HttpGet]
         [Route("[controller]/Agregar")]
         public async Task<IActionResult> Add()
         {
-            Alumno alumno = new Alumno() { FechaNac = DateTime.Now };
             ViewBag.Generos = Recursos.GetGeneros();
-            return View("AddAlumno", alumno);
+            return View("SaveProfesor", new Profesor());
         }
 
         [HttpPost]
         [Route("[controller]/Agregar")]
-        public async Task<IActionResult> Add(Alumno alumno)
+        public async Task<IActionResult> Add(Profesor profesor)
         {
-            await context.Alumnos.AddAsync(alumno);
+            await context.Profesores.AddAsync(profesor);
             await context.SaveChangesAsync();
             return RedirectToAction("Index");
             //return View("AddAlumno", new Alumno());
@@ -49,36 +46,34 @@ namespace PruebaTenicaFeb2023.Controllers
         [Route("[controller]/Actualizar/{Id:int}")]
         public async Task<IActionResult> Edit(int? Id)
         {
-            Alumno getAlumno = new Alumno();
+            Profesor getProfesor = new Profesor();
             ViewBag.Generos = Recursos.GetGeneros();
             if (Id != null)
             {
-                getAlumno = await context.Alumnos.FindAsync(Id);
+                getProfesor = await context.Profesores.FindAsync(Id);
             }
             else
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Profesores");
             }
-            return View("UpdateAlumno", getAlumno);
+            return View("UpdateProfesor", getProfesor);
         }
 
         [HttpPost]
         [Route("[controller]/Actualizar")]
-        public async Task<IActionResult> SaveAlumno(Alumno alumno)
+        public async Task<IActionResult> UpdateProfesor(Profesor profesor)
         {
-            var GetAlumno = await context.Alumnos.FindAsync(alumno.Id);
+            var GetProfesor = await context.Profesores.FindAsync(profesor.Id);
             ViewBag.Generos = Recursos.GetGeneros();
-            if (GetAlumno != null)
-            {
-                GetAlumno.FechaNac = alumno.FechaNac;
-                GetAlumno.Nombre = alumno.Nombre;
-                GetAlumno.Genero = alumno.Genero;
-                context.Entry(GetAlumno).State = EntityState.Modified;
+            if (GetProfesor != null) {
+                GetProfesor.Nombre = profesor.Nombre;
+                GetProfesor.Genero = profesor.Genero;
+                context.Entry(GetProfesor).State = EntityState.Modified;
                 int rowsAffected = await context.SaveChangesAsync();
                 if (rowsAffected != 0)
                     return RedirectToAction("Index");
             }
-            return View("UpdateAlumno", alumno);
+            return View("UpdateProfesor", profesor);
         }
     }
 }

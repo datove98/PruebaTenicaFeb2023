@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,5 +17,14 @@ namespace PruebaTenicaFeb2023.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime FechaNac { get; set; } = new DateTime();
         public virtual ICollection<AlumnoGrado> AlumnoGrados { get; set; }
+
+        public static List<SelectListItem> GetGeneros()
+        {
+            List<SelectListItem> Generos = new List<SelectListItem> {
+            new SelectListItem() { Text="Hombre",Value="H"},
+            new SelectListItem() { Text="Mujer", Value= "M"}
+            };
+            return Generos;
+        }
     }
 }
