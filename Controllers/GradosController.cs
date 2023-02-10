@@ -87,5 +87,40 @@ namespace PruebaTenicaFeb2023.Controllers
             return View("UpdateGrado", grado);
         }
 
+        [Route("[controller]/Eliminar/{Id:int}")]
+        [HttpGet]
+        public async Task<IActionResult> DeleteGrado(int? Id)
+        {
+            Grado getGrado = new Grado();
+            if (Id != null)
+            {
+                if (getGrado != null)
+                {
+                    getGrado = await context.Grados.Include(g => g.Profesor).FirstOrDefaultAsync(ag => ag.Id == Id);
+                    return View("DeleteGrado", getGrado);
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Route("[controller]/Eliminar/{Id:int}")]
+        public async Task<IActionResult> DeleteGrado(Grado grado)
+        {
+            Grado getGrado = new Grado();
+            if (grado != null)
+            {
+                getGrado = await context.Grados.FirstOrDefaultAsync(ag => ag.Id == grado.Id);
+                if (getGrado != null)
+                {
+                    context.Grados.Remove(getGrado);
+                    await context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            return View("DeleteGrado", grado);
+            //return RedirectToAction("Index");            
+        }
+
     }
 }

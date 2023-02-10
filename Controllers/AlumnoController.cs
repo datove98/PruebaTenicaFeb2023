@@ -80,5 +80,40 @@ namespace PruebaTenicaFeb2023.Controllers
             }
             return View("UpdateAlumno", alumno);
         }
+
+        [Route("[controller]/Eliminar/{Id:int}")]
+        [HttpGet]
+        public async Task<IActionResult> DeleteAlumno(int? Id)
+        {
+            Alumno getAlumno = new Alumno();
+            if (Id != null)
+            {
+                getAlumno = await context.Alumnos.FirstOrDefaultAsync(ag => ag.Id == Id);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+            return View("DeleteAlumno", getAlumno);
+        }
+
+        [HttpPost]
+        [Route("[controller]/Eliminar/{Id:int}")]
+        public async Task<IActionResult> DeleteAlumno(Alumno alumno)
+        {
+            Alumno getAlumno = new Alumno();
+            if (alumno != null)
+            {
+                getAlumno = await context.Alumnos.FirstOrDefaultAsync(ag => ag.Id == alumno.Id);
+                if (getAlumno != null)
+                {
+                    context.Alumnos.Remove(getAlumno);
+                    await context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            return View("DeleteAlumno", alumno);
+            //return RedirectToAction("Index");            
+        }
     }
 }

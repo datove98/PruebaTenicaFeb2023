@@ -1,0 +1,54 @@
+﻿@model PruebaTenicaFeb2023.Models.Alumno
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            @using (Html.BeginForm("DeleteAlumno", "Alumno", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.Id)
+                <div class="mb-3">
+                    <label for="txtNombre" class="form-label">Alumno</label>
+                    @Html.DisplayFor(m => m.Nombre, new { @class ="form-label" })
+
+                </div>
+                <div class="mb-3">
+                    <label for="txtNombre" class="form-label">Fecha de nacimiento</label>
+                    @Html.DisplayFor(m => m.FechaNac, new { @class ="form-label" })
+                </div>
+                <div class="mb-3">
+                    <label for="txtNombre" class="form-label">Genero</label>
+                    @Html.DisplayFor(m => m.Genero, new { @id = "txtSeccion", @class = "form-label" })
+                </div>
+                <button type="submit" class="btn btn-primary" id="btnSubmit">Submit</button>
+            }
+        </div>
+        <div id="confirmDialog" title="Eliminar Estudiante" hidden>
+            <p>Desea borrar al Estudiante seleccionado?</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(
+        function () {
+            $("#btnSubmit").click(function (e) {
+                e.preventDefault();
+                $("#confirmDialog").dialog("open");
+            });
+
+            $("#confirmDialog").dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                buttons: {
+                    "OK": function () {
+                        $('form').submit();
+                    },
+                    "Cancelar": function (e) {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        }
+    )
+</script>

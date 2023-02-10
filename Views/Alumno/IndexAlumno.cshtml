@@ -15,6 +15,7 @@
                         <th scope="col">Genero</th>
                         <th scope="col">Fecha Nacimiento</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,8 +25,9 @@
                             <td>@alumno.Id</td>
                             <td>@alumno.Nombre</td>
                             <td>@alumno.Genero</td>
-                            <td>@alumno.FechaNac</td>
+                            <td>@alumno.FechaNac.ToString("MM/dd/yyyy")</td>
                             <td>@Html.ActionLink("Editar","Edit","Alumno",new { Id = alumno.Id }, new { @class = "" })</td>
+                            <td>@Html.ActionLink("Eliminar","DeleteAlumno","Alumno",new { Id = alumno.Id }, new { @class = "" })</td>
                         </tr>
                     }
                 </tbody>
