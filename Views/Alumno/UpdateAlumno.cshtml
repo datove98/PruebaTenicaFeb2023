@@ -11,7 +11,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="txtNombre" class="form-label">Genero</label>
-                    @Html.TextBoxFor(m => m.Genero, new { @id = "txtGenero", @class = "form-control" })
+                    @Html.DropDownListFor(m => m.Genero, (IEnumerable<SelectListItem>)ViewBag.Generos, new { @id = "txtGenero", @class = "form-control" })
 
                 </div>
                 <div class="mb-3">

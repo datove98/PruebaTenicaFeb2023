@@ -38,17 +38,24 @@ namespace PruebaTenicaFeb2023.Controllers
         public async Task<IActionResult> Add(Grado grado)
         {
             ModelState.Clear();
-            ViewBag.Profesores = new SelectList(await context.Profesores.ToListAsync(), "Id", "Nombre");
-            if (ModelState.IsValid)
+            try
             {
-                context.Grados.Add(grado);
-                int numRows = await context.SaveChangesAsync();
-                if (numRows > 0)
+                ViewBag.Profesores = new SelectList(await context.Profesores.ToListAsync(), "Id", "Nombre");
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction("Index");
+                    context.Grados.Add(grado);
+                    int numRows = await context.SaveChangesAsync();
+                    if (numRows > 0)
+                    {
+                        return RedirectToAction("Index");
+                    }
                 }
+                return View("AddGrado", grado);
             }
-            return View("AddGrado", grado);
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpGet]
@@ -73,18 +80,71 @@ namespace PruebaTenicaFeb2023.Controllers
         public async Task<IActionResult> EditGrado(Grado grado)
         {
             ModelState.Clear();
-            ViewBag.Profesores = new SelectList(await context.Profesores.ToListAsync(), "Id", "Nombre");
-            if (ModelState.IsValid) {
-                var getGrado = await context.Grados.Include(g => g.Profesor).FirstOrDefaultAsync(g => g.Id == grado.Id);
-                if (getGrado != null) {
-                    getGrado.Nombre = grado.Nombre;
-                    getGrado.ProfesorId = grado.ProfesorId;
-                    context.Entry<Grado>(getGrado).State = EntityState.Modified;
-                    int rowsAffected = await context.SaveChangesAsync();
-                    if (rowsAffected > 0) { return RedirectToAction("Index"); }
+            try
+            {
+                ViewBag.Profesores = new SelectList(await context.Profesores.ToListAsync(), "Id", "Nombre");
+                if (ModelState.IsValid)
+                {
+                    var getGrado = await context.Grados.Include(g => g.Profesor).FirstOrDefaultAsync(g => g.Id == grado.Id);
+                    if (getGrado != null)
+                    {
+                        getGrado.Nombre = grado.Nombre;
+                        getGrado.ProfesorId = grado.ProfesorId;
+                        context.Entry<Grado>(getGrado).State = EntityState.Modified;
+                        int rowsAffected = await context.SaveChangesAsync();
+                        if (rowsAffected > 0) { return RedirectToAction("Index"); }
+                    }
+                }
+                return View("UpdateGrado", grado);
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        [Route("[controller]/Eliminar/{Id:int}")]
+        [HttpGet]
+        public async Task<IActionResult> DeleteGrado(int? Id)
+        {
+            Grado getGrado = new Grado();
+            if (Id != null)
+            {
+                if (getGrado != null)
+                {
+                    getGrado = await context.Grados.Include(g => g.Profesor).FirstOrDefaultAsync(ag => ag.Id == Id);
+                    return View("DeleteGrado", getGrado);
                 }
             }
-            return View("UpdateGrado", grado);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Route("[controller]/Eliminar/{Id:int}")]
+        public async Task<IActionResult> DeleteGrado(Grado grado)
+        {
+            ModelState.Clear();
+            Grado getGrado = new Grado();
+            try
+            {
+                if (grado != null)
+                {
+                    getGrado = await context.Grados.FirstOrDefaultAsync(ag => ag.Id == grado.Id);
+                    if (getGrado != null)
+                    {
+                        context.Grados.Remove(getGrado);
+                        await context.SaveChangesAsync();
+                        return RedirectToAction("Index");
+                    }
+                }
+                return View("DeleteGrado", grado);
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index");
+            }
+
+            //return RedirectToAction("Index");            
         }
 
     }

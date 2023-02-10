@@ -1,0 +1,51 @@
+﻿@model PruebaTenicaFeb2023.Models.Grado
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            @using (Html.BeginForm("DeleteGrado", "Grados", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.Id)
+                <div class="mb-3">
+                    <label class="form-label">Alumno</label>
+                    @Html.DisplayFor(m => m.Nombre, new { @class ="form-label" })
+
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Profesor</label>
+                    @Html.DisplayFor(m => m.Profesor.Nombre, new { @class ="form-label" })
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="btnSubmit">Submit</button>
+            }
+        </div>
+        <div id="confirmDialog" title="Eliminar Grado" hidden>
+            <p>Desea borrar el Grado seleccionado?</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(
+        function () {
+            $("#btnSubmit").click(function (e) {
+                e.preventDefault();
+                $("#confirmDialog").dialog("open");
+            });
+
+            $("#confirmDialog").dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                buttons: {
+                    "OK": function () {
+                        $('form').submit();
+                    },
+                    "Cancelar": function (e) {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        }
+    )
+</script>

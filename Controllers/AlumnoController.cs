@@ -39,8 +39,18 @@ namespace PruebaTenicaFeb2023.Controllers
         [Route("[controller]/Agregar")]
         public async Task<IActionResult> Add(Alumno alumno)
         {
-            await context.Alumnos.AddAsync(alumno);
-            await context.SaveChangesAsync();
+            ModelState.Clear();
+            try
+            {
+                await context.Alumnos.AddAsync(alumno);
+                await context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+
+                
+            }
             return RedirectToAction("Index");
             //return View("AddAlumno", new Alumno());
         }
@@ -66,19 +76,65 @@ namespace PruebaTenicaFeb2023.Controllers
         [Route("[controller]/Actualizar")]
         public async Task<IActionResult> SaveAlumno(Alumno alumno)
         {
-            var GetAlumno = await context.Alumnos.FindAsync(alumno.Id);
+            ModelState.Clear();
             ViewBag.Generos = Recursos.GetGeneros();
-            if (GetAlumno != null)
+            try
             {
-                GetAlumno.FechaNac = alumno.FechaNac;
-                GetAlumno.Nombre = alumno.Nombre;
-                GetAlumno.Genero = alumno.Genero;
-                context.Entry(GetAlumno).State = EntityState.Modified;
-                int rowsAffected = await context.SaveChangesAsync();
-                if (rowsAffected != 0)
-                    return RedirectToAction("Index");
+                var GetAlumno = await context.Alumnos.FindAsync(alumno.Id);
+                if (GetAlumno != null)
+                {
+                    GetAlumno.FechaNac = alumno.FechaNac;
+                    GetAlumno.Nombre = alumno.Nombre;
+                    GetAlumno.Genero = alumno.Genero;
+                    context.Entry(GetAlumno).State = EntityState.Modified;
+                    int rowsAffected = await context.SaveChangesAsync();
+                    if (rowsAffected != 0)
+                        return RedirectToAction("Index");
+                }
+                return View("UpdateAlumno", alumno);
             }
-            return View("UpdateAlumno", alumno);
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return RedirectToAction("Index");
+        }
+
+        [Route("[controller]/Eliminar/{Id:int}")]
+        [HttpGet]
+        public async Task<IActionResult> DeleteAlumno(int? Id)
+        {
+            Alumno getAlumno = new Alumno();
+            if (Id != null)
+            {
+                getAlumno = await context.Alumnos.FirstOrDefaultAsync(ag => ag.Id == Id);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+            return View("DeleteAlumno", getAlumno);
+        }
+
+        [HttpPost]
+        [Route("[controller]/Eliminar/{Id:int}")]
+        public async Task<IActionResult> DeleteAlumno(Alumno alumno)
+        {
+            ModelState.Clear();
+            Alumno getAlumno = new Alumno();
+            if (alumno != null)
+            {
+                getAlumno = await context.Alumnos.FirstOrDefaultAsync(ag => ag.Id == alumno.Id);
+                if (getAlumno != null)
+                {
+                    context.Alumnos.Remove(getAlumno);
+                    await context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            return View("DeleteAlumno", alumno);
+            //return RedirectToAction("Index");            
         }
     }
 }

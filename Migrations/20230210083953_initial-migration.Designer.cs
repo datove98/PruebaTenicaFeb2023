@@ -10,8 +10,8 @@ using PruebaTenicaFeb2023;
 namespace PruebaTenicaFeb2023.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230205234436_initial")]
-    partial class initial
+    [Migration("20230210083953_initial-migration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

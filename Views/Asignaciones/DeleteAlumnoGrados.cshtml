@@ -7,23 +7,23 @@
             {
                 @Html.HiddenFor(m => m.Id)
                 <div class="mb-3">
-                    <label for="txtNombre" class="form-label">Alumno</label>
+                    <label class="form-label">Alumno</label>
                     @Html.DisplayFor(m => m.Alumno.Nombre, new { @class ="form-label" })
 
                 </div>
                 <div class="mb-3">
-                    <label for="txtNombre" class="form-label">Grado</label>
-                    @Html.DisplayFor(m => m.Alumno.Nombre, new { @class ="form-label" })
+                    <label class="form-label">Grado</label>
+                    @Html.DisplayFor(m => m.Grado.Nombre, new { @class ="form-label" })
                 </div>
                 <div class="mb-3">
-                    <label for="txtNombre" class="form-label">Seccion</label>
+                    <label class="form-label">Seccion</label>
                     @Html.DisplayFor(m => m.Seccion, new { @id = "txtSeccion", @class = "form-label" })
                 </div>
                 <button type="submit" class="btn btn-primary" id="btnSubmit">Submit</button>
             }
         </div>
-        <div id="confirmDialog" title="Save Student" hidden>
-            <p>Do you want to save changes</p>
+        <div id="confirmDialog" title="Eliminar Asignacion" hidden>
+            <p>Desea borrar la Asignacion seleccionada?</p>
         </div>
     </div>
 </div>
@@ -44,7 +44,7 @@
                     "OK": function (){
                         $('form').submit();
                     },
-                    "Cancel":function (e){
+                    "Cancelar":function (e){
                         $(this).dialog("close");
                     }
                 }
