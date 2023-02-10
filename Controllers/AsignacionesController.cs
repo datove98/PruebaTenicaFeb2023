@@ -82,8 +82,8 @@ namespace PruebaTenicaFeb2023.Controllers
             return View("UpdateAlumnoGrados", alumnoGrado);
         }
 
-        [HttpGet]
         [Route("[controller]/Eliminar/{Id:int}")]
+        [HttpGet]
         public async Task<IActionResult> DeleteAsignacion(int? Id)
         {
             AlumnoGrado getAlumnoGrado = new AlumnoGrado();
@@ -96,6 +96,24 @@ namespace PruebaTenicaFeb2023.Controllers
                 return RedirectToAction("Index");
             }
             return View("DeleteAlumnoGrados", getAlumnoGrado);
+        }
+
+        [HttpPost]
+        [Route("[controller]/Eliminar/{Id:int}")]
+        public async Task<IActionResult> DeleteAsignacion(AlumnoGrado alumnoGrado)
+        {
+            AlumnoGrado getAlumnoGrado = new AlumnoGrado();
+            if (alumnoGrado != null)
+            {
+                getAlumnoGrado = await context.AlumnosGrados.Include(ag => ag.Grado).Include(ag => ag.Alumno).FirstOrDefaultAsync(ag => ag.Id == alumnoGrado.Id);
+                if (getAlumnoGrado != null)
+                {
+                    context.AlumnosGrados.Remove(getAlumnoGrado);
+                    await context.SaveChangesAsync();
+                }
+            }
+            return View("DeleteAlumnoGrados", alumnoGrado);
+            //return RedirectToAction("Index");            
         }
     }
 }
