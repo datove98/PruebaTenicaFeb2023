@@ -36,11 +36,21 @@ namespace PruebaTenicaFeb2023.Controllers
         [Route("[controller]/Agregar")]
         public async Task<IActionResult> Add(Profesor profesor)
         {
+            ModelState.Clear();
             ViewBag.Generos = Recursos.GetGeneros();
-            await context.Profesores.AddAsync(profesor);
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.Profesores.AddAsync(profesor);
+                await context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
             return RedirectToAction("Index");
-            //return View("AddAlumno", new Alumno());
         }
 
         [HttpGet]
@@ -64,6 +74,7 @@ namespace PruebaTenicaFeb2023.Controllers
         [Route("[controller]/Actualizar")]
         public async Task<IActionResult> UpdateProfesor(Profesor profesor)
         {
+            ModelState.Clear();
             try
             {
                 var GetProfesor = await context.Profesores.FindAsync(profesor.Id);
@@ -106,6 +117,7 @@ namespace PruebaTenicaFeb2023.Controllers
         [Route("[controller]/Eliminar/{Id:int}")]
         public async Task<IActionResult> DeleteProfesor(Profesor profesor)
         {
+            ModelState.Clear();
             Profesor getProfesor = new Profesor();
             try
             {

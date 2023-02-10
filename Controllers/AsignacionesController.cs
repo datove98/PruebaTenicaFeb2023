@@ -29,16 +29,26 @@ namespace PruebaTenicaFeb2023.Controllers
         [Route("[controller]/Agregar")]
         public async Task<IActionResult> Add()
         {
-            AlumnoGrado alumnoGrado = new AlumnoGrado();
-            ViewBag.Alumnos = new SelectList(await context.Alumnos.ToListAsync(), "Id", "Nombre");
-            ViewBag.Grados = new SelectList(await context.Grados.ToListAsync(), "Id", "Nombre");
-            return View("AddAlumnoGrados", alumnoGrado);
+            try
+            {
+
+                AlumnoGrado alumnoGrado = new AlumnoGrado();
+                ViewBag.Alumnos = new SelectList(await context.Alumnos.ToListAsync(), "Id", "Nombre");
+                ViewBag.Grados = new SelectList(await context.Grados.ToListAsync(), "Id", "Nombre");
+                return View("AddAlumnoGrados", alumnoGrado);
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index");
+            }
+
         }
 
         [HttpPost]
         [Route("[controller]/Agregar")]
         public async Task<IActionResult> Add(AlumnoGrado alumnoGrado)
         {
+            ModelState.Clear();
             await context.AlumnosGrados.AddAsync(alumnoGrado);
             await context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -50,6 +60,7 @@ namespace PruebaTenicaFeb2023.Controllers
         {
             ViewBag.Alumnos = new SelectList(await context.Alumnos.ToListAsync(), "Id", "Nombre");
             ViewBag.Grados = new SelectList(await context.Grados.ToListAsync(), "Id", "Nombre");
+            
             AlumnoGrado getAlumnoGrado = new AlumnoGrado();
             if (Id != null)
             {
@@ -66,20 +77,28 @@ namespace PruebaTenicaFeb2023.Controllers
         [Route("[controller]/Actualizar")]
         public async Task<IActionResult> SaveAsignacion(AlumnoGrado alumnoGrado)
         {
+            ModelState.Clear();
             ViewBag.Alumnos = new SelectList(await context.Alumnos.ToListAsync(), "Id", "Nombre");
             ViewBag.Grados = new SelectList(await context.Grados.ToListAsync(), "Id", "Nombre");
-            var GetAlumnoGrado = await context.AlumnosGrados.FindAsync(alumnoGrado.Id);
-            if (GetAlumnoGrado != null)
+            try
             {
-                GetAlumnoGrado.AlumnoId = alumnoGrado.AlumnoId;
-                GetAlumnoGrado.GradoId = alumnoGrado.GradoId;
-                GetAlumnoGrado.Seccion = alumnoGrado.Seccion;
-                context.Entry(GetAlumnoGrado).State = EntityState.Modified;
-                int rowsAffected = await context.SaveChangesAsync();
-                if (rowsAffected != 0)
-                    return RedirectToAction("Index");
+                var GetAlumnoGrado = await context.AlumnosGrados.FindAsync(alumnoGrado.Id);
+                if (GetAlumnoGrado != null)
+                {
+                    GetAlumnoGrado.AlumnoId = alumnoGrado.AlumnoId;
+                    GetAlumnoGrado.GradoId = alumnoGrado.GradoId;
+                    GetAlumnoGrado.Seccion = alumnoGrado.Seccion;
+                    context.Entry(GetAlumnoGrado).State = EntityState.Modified;
+                    int rowsAffected = await context.SaveChangesAsync();
+                    if (rowsAffected != 0)
+                        return RedirectToAction("Index");
+                }
+                return View("UpdateAlumnoGrados", alumnoGrado);
             }
-            return View("UpdateAlumnoGrados", alumnoGrado);
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         [Route("[controller]/Eliminar/{Id:int}")]
@@ -102,17 +121,27 @@ namespace PruebaTenicaFeb2023.Controllers
         [Route("[controller]/Eliminar/{Id:int}")]
         public async Task<IActionResult> DeleteAsignacion(AlumnoGrado alumnoGrado)
         {
-            AlumnoGrado getAlumnoGrado = new AlumnoGrado();
-            if (alumnoGrado != null)
+            ModelState.Clear();
+            try
             {
-                getAlumnoGrado = await context.AlumnosGrados.Include(ag => ag.Grado).Include(ag => ag.Alumno).FirstOrDefaultAsync(ag => ag.Id == alumnoGrado.Id);
-                if (getAlumnoGrado != null)
+                AlumnoGrado getAlumnoGrado = new AlumnoGrado();
+                if (alumnoGrado != null)
                 {
-                    context.AlumnosGrados.Remove(getAlumnoGrado);
-                    await context.SaveChangesAsync();
+                    getAlumnoGrado = await context.AlumnosGrados.Include(ag => ag.Grado).Include(ag => ag.Alumno).FirstOrDefaultAsync(ag => ag.Id == alumnoGrado.Id);
+                    if (getAlumnoGrado != null)
+                    {
+                        context.AlumnosGrados.Remove(getAlumnoGrado);
+                        await context.SaveChangesAsync();
+                        return RedirectToAction("Index");
+                    }
                 }
+                return View("DeleteAlumnoGrados", alumnoGrado);
+
             }
-            return View("DeleteAlumnoGrados", alumnoGrado);
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index");
+            }
             //return RedirectToAction("Index");            
         }
     }
