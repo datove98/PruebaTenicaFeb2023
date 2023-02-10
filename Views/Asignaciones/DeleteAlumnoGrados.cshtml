@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            @using (Html.BeginForm(FormMethod.Post))
+            @using (Html.BeginForm("DeleteAsignacion", "Asignaciones", FormMethod.Post))
             {
                 @Html.HiddenFor(m => m.Id)
                 <div class="mb-3">
@@ -22,6 +22,9 @@
                 <button type="submit" class="btn btn-primary" id="btnSubmit">Submit</button>
             }
         </div>
+        <div id="confirmDialog" title="Save Student" hidden>
+            <p>Do you want to save changes</p>
+        </div>
     </div>
 </div>
 
@@ -30,8 +33,22 @@
         function (){
             $("#btnSubmit").click(function(e) {
                 e.preventDefault();
-                alert("borrado jeje")
-            })
+                $("#confirmDialog").dialog("open");
+            });
+
+            $("#confirmDialog").dialog({
+                autoOpen:false,
+                modal: true,
+                resizable: false,
+                buttons: {
+                    "OK": function (){
+                        $('form').submit();
+                    },
+                    "Cancel":function (e){
+                        $(this).dialog("close");
+                    }
+                }
+            });
         }    
     )
 </script>
