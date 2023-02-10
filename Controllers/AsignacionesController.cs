@@ -49,9 +49,17 @@ namespace PruebaTenicaFeb2023.Controllers
         public async Task<IActionResult> Add(AlumnoGrado alumnoGrado)
         {
             ModelState.Clear();
-            await context.AlumnosGrados.AddAsync(alumnoGrado);
-            await context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            try
+            {
+                await context.AlumnosGrados.AddAsync(alumnoGrado);
+                await context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("Index");
+            }
+            
         }
 
         [HttpGet]
